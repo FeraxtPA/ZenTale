@@ -118,11 +118,17 @@ class CustomDropdownMenu(customtkinter.CTkFrame):
             fg_color=self.fg_color,
             hover_color=self.hover_color,
             font=self.font,
+            text_color=self.text_color
         )
         submenuButtonSeed.setSubmenu(submenu=submenu)
         submenuButtonSeed.configure(command=submenu.toggleShow)
         
-        submenuButtonSeed.bind("<Enter>", lambda e: self.after(500, submenu._show))
+        # Inside the add_submenu method:
+
+        submenuButtonSeed.bind("<Enter>", lambda event, submenu=submenu: self.after(0, submenu._show(event)))
+        submenuButtonSeed.bind("<Leave>", lambda event, submenu=submenu: self.after(500, submenu._hide()) if not self._get_coordinates(event.x_root, event.y_root) and not submenu._get_coordinates(event.x_root, event.y_root) else None)
+
+
         
         submenuButtonSeed.pack(
             side="top",
@@ -133,6 +139,7 @@ class CustomDropdownMenu(customtkinter.CTkFrame):
         )
         return submenu
     
+   
     def add_separator(self) -> None:
         separator = customtkinter.CTkFrame(
             master=self, 
@@ -146,6 +153,8 @@ class CustomDropdownMenu(customtkinter.CTkFrame):
             expand=True,
         )
 
+    
+    
     def _show(self, *args, **kwargs) -> None:
         if isinstance(self.menu_seed_object, _CDMSubmenuButton):
             self.place(
@@ -159,7 +168,7 @@ class CustomDropdownMenu(customtkinter.CTkFrame):
                 y=self.menu_seed_object.winfo_y() + self.menu_seed_object.winfo_height() + self.pady,
             )
         self.focus()
-        
+       
     def _hide(self, *args, **kwargs) -> None:
         self.place_forget()
         
@@ -178,7 +187,8 @@ class CustomDropdownMenu(customtkinter.CTkFrame):
         self._hideChildrenMenus()
         self._hide()
         self._hideParentMenus()
-        
+    
+    
     def _collapseSiblingSubmenus(self, button: _CDMOptionButton | _CDMSubmenuButton, *args, **kwargs) -> None:
         for option in self._options_list:
             if option != button and isinstance(option, _CDMSubmenuButton):

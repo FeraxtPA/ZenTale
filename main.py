@@ -21,7 +21,7 @@ class App(ctk.CTk):
         self.geometry("1920x1080")
         self.title('')
         self.resizable(False, False)
-        self.configure(fg_color='#24273a')
+        self.configure(fg_color=FG_COLOR)
         #  Widgets
         self.menu_bar = MenuBar(self)
         
@@ -30,12 +30,12 @@ class App(ctk.CTk):
         self.change_titlebar_color()
         self.create_icon()
         
-        #? test self.textbox = ctk.CTkTextbox(self, width=500, height=700).pack()
+        #self.textbox = ctk.CTkTextbox(self, width=500, height=700).pack()
         
-        self.bind('<Control-n>', self.ptest)
+        self.bind_all('<Control-q>', self.exit_app)
         #? Works need to be done for every shortcut
     def ptest(self, event):
-            print('HEllo')
+            print('Window bind')
     def create_icon(self):
         self.iconpath = ImageTk.PhotoImage(file=os.path.join("Assets","quill.png"))
         self.wm_iconbitmap()
@@ -48,11 +48,17 @@ class App(ctk.CTk):
             windll.dwmapi.DwmSetWindowAttribute(HWND, 35, byref(c_int(title_bar_color)), sizeof(c_int))
         except:
             pass
-        
+    
+    def exit_app(self, event):
+        self.destroy()
+    
+    
+            
 class MenuBar(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
         
+        self.parent = parent
         menu = CTkTitleMenu(parent,  padx=10, y_offset=4)
         
         file_button = menu.add_cascade('File')
@@ -68,7 +74,7 @@ class MenuBar(ctk.CTkFrame):
         about_button = menu.add_cascade("About")
         about_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color=TEXT_COLOR)
 
-        dropdown1 = CustomDropdownMenu(widget=file_button, border_width=0, font=('Segoe UI Variable', 16 ), text_color=TEXT_COLOR,)
+        dropdown1 = CustomDropdownMenu(widget=file_button, border_width=0, font=('Segoe UI Variable', 16 ), text_color=TEXT_COLOR, bg_color=MENU_COLOR, separator_color=SEPARATOR_COLOR, corner_radius=5, hover_color=HOVER_MENU_COLOR)
         
         
             
@@ -80,20 +86,32 @@ class MenuBar(ctk.CTkFrame):
         def print_save(event):
             print('Saved')
            
-           
-        #? work but only when you are currently focused on set wigdet         
-        menu.bind('<Control-n>', print_open)
+        
+        #? works but only when you are currently focused on set wigdet         
+        #menu.bind('<Control-n>', print_open)
         menu.bind('<Control-s>', print_save)
         
         dropdown1.add_option(option=OPEN_FILE, command=lambda: print("Open"))
-        dropdown1.add_option(option="Save")
+        dropdown1.add_option(option=SAVE_FILE, command= lambda: print("Saved"))
 
-        dropdown1.add_separator()
+       
 
-        sub_menu = dropdown1.add_submenu("Export As")
-        sub_menu.add_option(option=".TXT")
+        sub_menu = dropdown1.add_submenu(EXPORT_AS)
+        
+        sub_menu.add_option(option=".TXT", command= lambda: print("Hello motherfucker"))
         sub_menu.add_option(option=".PDF")
 
+        sub_menu.configure(border_width=0, fg_color=MENU_COLOR, corner_radius=5, )
+        sub_menu.padx=7
+        sub_menu.pady=7
+        
+        dropdown1.add_separator()
+        
+        def exit_app():
+            self.parent.destroy()
+    
+        dropdown1.add_option(option=EXIT, command=exit_app)
+        
         dropdown2 = CustomDropdownMenu(widget=edit_button)
         dropdown2.add_option(option="Cut")
         dropdown2.add_option(option="Copy")
@@ -105,6 +123,7 @@ class MenuBar(ctk.CTkFrame):
 
         dropdown4 = CustomDropdownMenu(widget=about_button)
         dropdown4.add_option(option="Hello World")
+        
         
  
 app = App()
