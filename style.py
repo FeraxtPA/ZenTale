@@ -16,3 +16,8 @@ NEW_FILE  = "New                                    Ctrl+N"
 OPEN_FILE = "Open                                  Ctrl+O"
 SAVE_FILE = "Save                                  Ctrl+S"
 EXPORT_AS = "Export as                 Ctrl+Shift+S"
+
+CUT =  "Cut                            Ctrl+X"
+COPY  ="Copy                         Ctrl+C"
+PASTE ="Paste                        Ctrl+V"
+FIND = "Find                           Ctrl+F"
