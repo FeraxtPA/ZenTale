@@ -27,10 +27,14 @@ class App(ctk.CTk):
         self.title('')
         #self.resizable(False, False)
         self.configure(fg_color=FG_COLOR)
+        
+        
+        self.font_families = font.families()
+    
         #  Widgets
         self.menu_bar = MenuBar(self)
         self.text_field = TextField(self)
-        self.tool_bar = Toolbar(self)
+        self.tool_bar = Toolbar(self, self.font_families)
         
         self.rowconfigure(0, weight=1, uniform='a')
         self.rowconfigure(1, weight=20, uniform='a')

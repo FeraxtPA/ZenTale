@@ -15,9 +15,12 @@ class TextField(ctk.CTkTextbox):
         
         self.configure(fg_color=TEXT_FIELD_COLOR,
                        text_color= TEXT_COLOR,
-                       font=('Segoe UI Variable', 16 ),
+                       font=('Arial', 16 ),
                        scrollbar_button_color=SCROLLBAR_COLOR,
-                       scrollbar_button_hover_color=HOVER_SCROLLBAR_COLOR)
+                       scrollbar_button_hover_color=HOVER_SCROLLBAR_COLOR,
+                       undo=True,
+                       maxundo=2,
+                       )
         
         
         
