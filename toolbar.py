@@ -63,11 +63,9 @@ class Toolbar(ctk.CTkFrame):
         self.font = selected_font
         
         
-        if len(selected_font) > 10:
-                selected_font = selected_font[:10] + "..."
-                self.button.configure(text=selected_font)
-        else:
-                self.button.configure(text=selected_font)
+        display_font = selected_font if len(selected_font) <= 10 else selected_font[:10] + "..."
+        self.button.configure(text=display_font)
+        
         try:
             self.selection_start = self.text.index('sel.first')
             self.selection_end = self.text.index('sel.last')

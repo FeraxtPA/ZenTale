@@ -1,7 +1,7 @@
-from menu import *
-from style import *
-from text_field import *
-from toolbar import *
+from menu import MenuBar
+from style import FG_COLOR
+from text_field import TextField
+from toolbar import Toolbar
 
 
 from tkinter import font
@@ -22,12 +22,18 @@ except:
 #test git repo
 
 class App(ctk.CTk):
+    
+    TITLE_BAR_COLOR = 0x00261918
+    ICON_PATH = os.path.join("Assets", "quill.png")
     def __init__(self):
         super().__init__()
         self.geometry("1920x1080")
         self.title('')
         #self.resizable(False, False)
         self.configure(fg_color=FG_COLOR)
+        
+        
+        
         
         
         self.font_families = font.families()
@@ -50,16 +56,14 @@ class App(ctk.CTk):
         self.create_icon()
         
         
-        
         self.bind_all('<Control-q>', self.exit_app)
         #? Works need to be done for every shortcut
         
 
 
     def create_icon(self):
-        self.iconpath = ImageTk.PhotoImage(file=os.path.join("Assets","quill.png"))
-        self.wm_iconbitmap()
-        self.iconphoto(False, self.iconpath)    
+        self.iconpath = ImageTk.PhotoImage(file=self.ICON_PATH)
+        self.iconphoto(False, self.iconpath)
     
     def change_titlebar_color(self):
         try:
