@@ -4,12 +4,13 @@ from text_field import *
 from toolbar import *
 
 
+from tkinter import font
+
 import customtkinter as ctk
-from CTkMenuBar import *
 
 import os
 from PIL import ImageTk
-import tkinter as tk
+
 
 
 #? For changing title bar color // only works for windows

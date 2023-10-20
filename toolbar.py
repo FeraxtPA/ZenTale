@@ -3,10 +3,9 @@ from style import *
 
 import customtkinter as ctk
 
-from tkinter import font
+
 from CTkScrollableDropdown import *
 from text_field import *
-from tkinter import ttk
 
 
 class Toolbar(ctk.CTkFrame):
