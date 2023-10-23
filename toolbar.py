@@ -4,15 +4,22 @@ from style import *
 import customtkinter as ctk
 
 
+from PIL import Image
 from CTkScrollableDropdown import *
 from text_field import *
 
 
 class Toolbar(ctk.CTkFrame):
+    
+   
     def __init__(self, parent, fonts):
         super().__init__(master=parent)
         
-        self.grid(row=0, column=0,columnspan=3, sticky='nsew')
+        self.italic_image = ctk.CTkImage(dark_image=Image.open("Assets/italic_white.png"), size=(13,13))
+        self.align_left_image = ctk.CTkImage(dark_image=Image.open("Assets/align_left.png"), size=(16,16))
+        self.align_center_image = ctk.CTkImage(dark_image=Image.open("Assets/align_center.png"), size=(16,16))
+        self.align_right_image = ctk.CTkImage(dark_image=Image.open("Assets/align_right.png"), size=(16,16))
+        self.grid(row=0, column=1, sticky='nsew')
         self.configure(fg_color=FG_COLOR)
         
         self.fonts = fonts
@@ -21,42 +28,124 @@ class Toolbar(ctk.CTkFrame):
         
         self.selection_start = None
         self.selection_end = None
-            
+        self.isBold = False
+        self.isItalic = False
         self.text = TextField(parent)
         
         self.default_textfield_font_size = 16
         self.font = 'Arial'
         
-        self.font_size_frame = ctk.CTkFrame(self, fg_color='white', width=200, height=100)
-        self.font_size_frame.pack(side='left', padx=10)
+        self.font_size_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
+        self.font_size_frame.pack(side='left', padx=10, anchor='center')
         
-        self.button = ctk.CTkButton(self.font_size_frame, text='Arial', width=100, fg_color=FONTBOX_COLOR, font=('Segoe UI Variable',16 ), anchor='center')
-        self.button.pack(side='left', padx=2, expand=False)
+        self.font_button = ctk.CTkButton(self.font_size_frame, text='Arial', width=100, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16 ), anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR)
+        self.font_button.pack(side='left', padx=4, pady=4)
         
-        
-        
-       
-        
-        self.button2 = ctk.CTkButton(self.font_size_frame, text=str(self.default_textfield_font_size), width=30, fg_color=FONTBOX_COLOR, font=('Segoe UI Variable', 16 ))
-        self.button2.pack(side='left')
+        self.font_size_button = ctk.CTkButton(self.font_size_frame, text=str(self.default_textfield_font_size), width=30, fg_color=BUTTON_COLOR, font=('Segoe UI Variable', 16 ), corner_radius=5, hover_color=BUTTON_HOVER_COLOR)
+        self.font_size_button.pack(side='left', pady=4, padx= 4)
         
         
-        CTkScrollableDropdown(self.button, values=self.fonts, height=270,  button_height=30, width=300,
+        CTkScrollableDropdown(self.font_button, values=self.fonts, height=270,  button_height=30, width=300,
                       scrollbar=True, resize=False, command=self.change_font)
         
         
-        CTkScrollableDropdown(self.button2, values=tuple(range(8,81)), height=270,  button_height=30, width=300,
+        CTkScrollableDropdown(self.font_size_button, values=tuple(range(8,81)), height=270,  button_height=30, width=300,
                       scrollbar=True, resize=False, command=self.change_font_size)
         
+        self.bold_italic_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
+        self.bold_italic_frame.pack(side='left', padx=10, anchor='center')
         
-  
-    
+        self.bold_button =ctk.CTkButton(self.bold_italic_frame, text='B', width=25, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16, 'bold' ), anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR, command=self.bold_text)
+        self.bold_button.pack(side='left', pady=4, padx=4)
+        
+        self.italic_button =ctk.CTkButton(self.bold_italic_frame, text='',width=25, fg_color=BUTTON_COLOR, anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.italic_image, command=self.italic_text)
+        self.italic_button.pack(side='left', pady=4, padx=4)
+        
+        self.underline_button =ctk.CTkButton(self.bold_italic_frame, text='U',width=25, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16, 'underline' ), anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR)
+        self.underline_button.pack(side='left', pady=4, padx=4)
         
         
+        
+        self.align_text_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
+        self.align_text_frame.pack(side='left', padx=10, anchor='center')
+        
+        self.align_left =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_left_image)
+        self.align_left.pack(side='left', pady=4, padx=4)
+        
+        self.align_center =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_center_image)
+        self.align_center.pack(side='left', pady=4, padx=4)
+        
+        self.align_right =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_right_image)
+        self.align_right.pack(side='left', pady=4, padx=4)
+        
+        
+    def bold_text(self):
+        try:
+            self.selection_start = self.text.index('sel.first')
+            self.selection_end = self.text.index('sel.last')
+        except:
+            return
 
-  
+        if self.selection_start == self.selection_end:
+            # No text is selected, just exit
+            return
+
+        current_tags = self.text.tag_names(self.selection_start)
+
+        # Toggle bold state
+        if self.isBold:
+            self.text.tag_remove('bold', self.selection_start, self.selection_end)
+        else:
+            self.text.tag_add('bold', self.selection_start, self.selection_end)
+            self.text.tag_configure('bold', font=(self.font, self.default_textfield_font_size, 'bold'))
+
+        # Check for existing italic tag and add it if present
+        if 'italic' in current_tags:
+            self.text.tag_add('bolditalic', self.selection_start, self.selection_end)
+            self.text.tag_configure('bolditalic', font=(self.font, self.default_textfield_font_size, 'bold italic'))
+
+        # Update the bold state
+        self.isBold = not self.isBold
+
+        # Deselect the text
+        self.text.tag_remove("sel", "1.0", "end")
+
+    def italic_text(self):
+       
+       
+        try:
+            self.selection_start = self.text.index('sel.first')
+            self.selection_end = self.text.index('sel.last')
+            self.text.tag_add('italic', self.selection_start, self.selection_end)
+        except:
+            self.selection_start = None
+            self.selection_end = None
+
+       
+       
+        if self.isItalic == False and (self.selection_start and self.selection_end) is None:
+                 self.text.configure(font=(self.font, self.default_textfield_font_size, 'italic'))
+                 self.isItalic = True
+                 
+        elif self.isItalic == True and (self.selection_start and self.selection_end) is None:
+                self.text.configure(font=(self.font, self.default_textfield_font_size))
+                self.isItalic = False
+                
+        elif self.isItalic == False and (self.selection_start and self.selection_end) is not None:  
+                self.text.tag_config('italic', font=(self.font, self.default_textfield_font_size, 'italic'))
+                self.isItalic = True
+                
+                
+        elif self.isItalic == True and (self.selection_start and self.selection_end) is not None:  
+                self.text.tag_config('italic', font=(self.font, self.default_textfield_font_size))
+                self.isItalic = False
+                self.text.tag_remove('italic', self.selection_start, self.selection_end)
+            
         
+            
+           
         
+    
     def change_font(self, selected_font):
         
         
@@ -64,7 +153,7 @@ class Toolbar(ctk.CTkFrame):
         
         
         display_font = selected_font if len(selected_font) <= 10 else selected_font[:10] + "..."
-        self.button.configure(text=display_font)
+        self.font_button.configure(text=display_font)
         
         try:
             self.selection_start = self.text.index('sel.first')
@@ -89,7 +178,7 @@ class Toolbar(ctk.CTkFrame):
         
         self.text.configure(font=(self.font, self.default_textfield_font_size))
         
-        self.button2.configure(text=self.default_textfield_font_size)
+        self.font_size_button.configure(text=self.default_textfield_font_size)
       
 
  

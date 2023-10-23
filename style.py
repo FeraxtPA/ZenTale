@@ -18,8 +18,9 @@ HOVER_SCROLLBAR_COLOR= '#9399b2'
 
 TOOLBAR_COLOR = '#585b70'
 
-FONTBOX_COLOR = '#5f4c77'
+BUTTON_COLOR = '#5a5c77'
 
+BUTTON_HOVER_COLOR = '#5b4676'
 
 EXIT = "Exit"
 NEW_FILE  = "New                                    Ctrl+N"

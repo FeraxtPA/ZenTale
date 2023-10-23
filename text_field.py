@@ -2,26 +2,35 @@ from style import *
 
 
 import customtkinter as ctk
+from tkinter import ttk
 
-
-
+import tkinter as tk
 
         
-class TextField(ctk.CTkTextbox):
+class TextField(tk.Text):
     def __init__(self, parent):
         super().__init__(master=parent)
         
         self.grid(row=1, column=1,rowspan=2, sticky='nsew', pady=5, padx=5)
         
-        self.configure(fg_color=TEXT_FIELD_COLOR,
-                       text_color= TEXT_COLOR,
-                       font=('Arial', 16 ),
-                       scrollbar_button_color=SCROLLBAR_COLOR,
-                       scrollbar_button_hover_color=HOVER_SCROLLBAR_COLOR,
-                       undo=True,
-                       maxundo=2,
-                       )
         
+        
+        self.scrollbar = ctk.CTkScrollbar(self, command=self.yview, button_color=BUTTON_COLOR,  button_hover_color=BUTTON_HOVER_COLOR, fg_color=TEXT_FIELD_COLOR)
+        self.scrollbar.pack(side='right', fill='y')
+        
+        
+        self.configure(bg=TEXT_FIELD_COLOR,
+                       fg=TEXT_COLOR,
+                       bd=0,
+                       font=('Segoe UI Variable', 16 ),
+                       insertbackground='white',
+                       relief='flat',
+                       selectbackground=HOVER_COLOR,
+                       yscrollcommand=self.scrollbar.set,
+                       undo=True,
+                       maxundo=1)
+                       
+      
         
         
         self.bind('<Control-BackSpace>', lambda event: self.delete_whole_word(event))
@@ -29,7 +38,7 @@ class TextField(ctk.CTkTextbox):
          
     def delete_whole_word(self, event):
         text_widget = event.widget
-        cursor_pos = text_widget.index(ctk.INSERT)
+        cursor_pos = text_widget.index(tk.INSERT)
         line_start = f"{cursor_pos.split('.')[0]}.0"  # Get the start of the current line
         text_before_cursor = text_widget.get(line_start, cursor_pos)  # Get text from line start to cursor position
 
