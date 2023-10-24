@@ -20,15 +20,16 @@ class TextField(tk.Text):
         
         
         self.configure(bg=TEXT_FIELD_COLOR,
-                       fg=TEXT_COLOR,
+                       fg=TEXT_FIELD_TEXT_COLOR,
                        bd=0,
                        font=('Segoe UI Variable', 16 ),
-                       insertbackground='white',
+                       insertbackground='#148e9b',
                        relief='flat',
-                       selectbackground=HOVER_COLOR,
+                       selectbackground='#148e9b',
                        yscrollcommand=self.scrollbar.set,
                        undo=True,
-                       maxundo=1)
+                       maxundo=1,
+                       inactiveselectbackground='#148e9b')
                        
       
         

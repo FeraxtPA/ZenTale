@@ -23,7 +23,8 @@ except:
 
 class App(ctk.CTk):
     
-    TITLE_BAR_COLOR = 0x00261918
+    #TITLE_BAR_COLOR = 0x00261918
+    
     ICON_PATH = os.path.join("Assets", "quill.png")
     def __init__(self):
         super().__init__()
@@ -32,10 +33,10 @@ class App(ctk.CTk):
         #self.resizable(False, False)
         self.configure(fg_color=FG_COLOR)
         
+        self.TITLE_BAR_COLOR = 0x00282d2e
         
-        
-        
-        
+        #45433b
+        #2e2d28
         self.font_families = font.families()
     
         #  Widgets
@@ -68,8 +69,8 @@ class App(ctk.CTk):
     def change_titlebar_color(self):
         try:
             HWND = windll.user32.GetParent(self.winfo_id())
-            title_bar_color = 0x00261918
-            windll.dwmapi.DwmSetWindowAttribute(HWND, 35, byref(c_int(title_bar_color)), sizeof(c_int))
+            
+            windll.dwmapi.DwmSetWindowAttribute(HWND, 35, byref(c_int(self.TITLE_BAR_COLOR)), sizeof(c_int))
         except:
             pass
     

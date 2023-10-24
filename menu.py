@@ -14,11 +14,11 @@ class MenuBar(ctk.CTkFrame):
         menu = CTkTitleMenu(parent,  padx=10, y_offset=4)
         
         file_button = menu.add_cascade('File')
-        file_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color=TEXT_COLOR)
+        file_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color='#e8e0c2')
       
        
         edit_button = menu.add_cascade("Edit")
-        edit_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color=TEXT_COLOR)
+        edit_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color='#e8e0c2')
         
         #? Placeholder settings_button = menu.add_cascade("Settings")
         #? Placeholder settings_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color=TEXT_COLOR)
