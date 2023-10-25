@@ -15,7 +15,7 @@ from CTkColorPicker import *
 class Toolbar(ctk.CTkFrame):
     
    
-    def __init__(self, parent, fonts):
+    def __init__(self, parent, fonts, text_field):
         super().__init__(master=parent)
         
         self.italic_image = ctk.CTkImage(dark_image=Image.open("Assets/italic.png"), size=(13,13))
@@ -35,7 +35,7 @@ class Toolbar(ctk.CTkFrame):
         self.selection_end = None
         self.isBold = False
         self.isItalic = False
-        self.text = TextField(parent)
+        self.text = text_field
         
         self.default_textfield_font_size = 16
         self.font = 'Arial'

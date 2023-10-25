@@ -42,8 +42,10 @@ class App(ctk.CTk):
         #  Widgets
         
         self.text_field = TextField(self)
+        
+        self.tool_bar = Toolbar(self, self.font_families,self.text_field, )
+        
         self.menu_bar = MenuBar(self, self.text_field)
-        self.tool_bar = Toolbar(self, self.font_families)
         
         
         self.rowconfigure(0, weight=1, uniform='a')

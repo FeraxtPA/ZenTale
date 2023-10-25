@@ -12,7 +12,7 @@ class MenuBar(CTkTitleMenu):
     def __init__(self, parent, text_field):
         super().__init__(master=parent)
         
-        
+        self.text = text_field
         
         self.file_button = self.add_cascade('File')
         self.file_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color='#e8e0c2')
@@ -34,7 +34,7 @@ class MenuBar(CTkTitleMenu):
 
         
         self.file_dropdown = CustomDropdownMenu(widget=self.file_button, border_width=0, font=('Segoe UI Variable', 16 ), text_color=TEXT_COLOR, bg_color=MENU_COLOR, separator_color=SEPARATOR_COLOR, corner_radius=5, hover_color=HOVER_MENU_COLOR)
-        self.file_dropdown.add_option(option=NEW_FILE)
+        self.file_dropdown.add_option(option=NEW_FILE, command=lambda: self.text.delete(0.0, "end"))
         
      
             
