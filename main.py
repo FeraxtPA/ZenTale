@@ -43,7 +43,7 @@ class App(ctk.CTk):
         
         self.text_field = TextField(self)
         
-        self.tool_bar = Toolbar(self, self.font_families,self.text_field, )
+        self.tool_bar = Toolbar(self, self.font_families,self.text_field )
         
         self.menu_bar = MenuBar(self, self.text_field)
         
@@ -62,6 +62,7 @@ class App(ctk.CTk):
         
         
         self.bind_all('<Control-q>', self.exit_app)
+        self.bind_all('<Control-n>', self.text_field.new_file)
         #? Works need to be done for every shortcut
         
 

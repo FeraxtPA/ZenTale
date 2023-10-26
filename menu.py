@@ -34,7 +34,7 @@ class MenuBar(CTkTitleMenu):
 
         
         self.file_dropdown = CustomDropdownMenu(widget=self.file_button, border_width=0, font=('Segoe UI Variable', 16 ), text_color=TEXT_COLOR, bg_color=MENU_COLOR, separator_color=SEPARATOR_COLOR, corner_radius=5, hover_color=HOVER_MENU_COLOR)
-        self.file_dropdown.add_option(option=NEW_FILE, command=lambda: self.text.delete(0.0, "end"))
+        self.file_dropdown.add_option(option=NEW_FILE, command= self.text.new_file)
         
      
             

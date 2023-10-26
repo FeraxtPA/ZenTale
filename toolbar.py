@@ -23,14 +23,16 @@ class Toolbar(ctk.CTkFrame):
         self.align_center_image = ctk.CTkImage(dark_image=Image.open("Assets/align_center.png"), size=(16,16))
         self.align_right_image = ctk.CTkImage(dark_image=Image.open("Assets/align_right.png"), size=(16,16))
         self.text_spacing_image = ctk.CTkImage(dark_image=Image.open("Assets/spacing.png"), size=(16,16))
+        self.text_color_image = ctk.CTkImage(dark_image=Image.open("Assets/text_color.png"), size=(16,16))
         self.grid(row=0, column=1, sticky='nsew')
         self.configure(fg_color=FG_COLOR)
         self.spacing_values = [0.0, 1.0,2.0,3.0,4.0,5.0]
-    
+
         self.fonts = fonts
         self.fonts = [font for font in self.fonts if not font.startswith('@')]
         self.fonts = sorted(self.fonts)
         
+        self.picker_active = False
         self.selection_start = None
         self.selection_end = None
         self.isBold = False
@@ -39,6 +41,12 @@ class Toolbar(ctk.CTkFrame):
         
         self.default_textfield_font_size = 16
         self.font = 'Arial'
+        
+        self.color_picker = CTkColorPicker(width=500, command=self.ask_color, orientation='horizontal', corner_radius=5, fg_color="#69625a")
+        
+        
+       
+        
         
         self.font_size_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
         self.font_size_frame.pack(side='left', padx=10, anchor='center')
@@ -90,22 +98,35 @@ class Toolbar(ctk.CTkFrame):
         self.spacing_button =ctk.CTkButton(self.spacing_color_frame, text='0.0',text_color=TEXT_COLOR,width=25, fg_color=BUTTON_COLOR, anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.text_spacing_image)
         self.spacing_button.pack(side='left', pady=4, padx=4)
         
+       
         
         CTkScrollableDropdown(self.spacing_button, values=self.spacing_values, width=150,
                       scrollbar=True, command=self.change_spacing)
         
        
-       
         self.color_picker_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
         self.color_picker_frame.pack(side='left', padx=10, anchor='center')
-        self.color_button = ctk.CTkButton(master=self.color_picker_frame, text="CHOOSE COLOR", text_color="black", command=self.ask_color)
+        self.color_button = ctk.CTkButton(master=self.color_picker_frame, text="", text_color=TEXT_COLOR, fg_color=BUTTON_COLOR, command=self.create_color_frame, hover_color=BUTTON_HOVER_COLOR, width=25, image=self.text_color_image)
         self.color_button.pack(side='left', pady=4, padx=4)
-       
+        
 
-    def ask_color(self):
-        pick_color = AskColor() # open the color picker
-        color = pick_color.get() # get the color string
-        self.text.configure(fg=color)
+    def create_color_frame(self):
+        if self.picker_active:
+            if self.color_picker is not None:
+                self.color_picker.place_forget()
+            self.picker_active = False
+        else:
+            if self.color_picker is None:
+               self.color_picker = CTkColorPicker(width=500, command=self.ask_color, orientation='horizontal', corner_radius=5)
+               
+            self.color_picker.place(in_ = self.color_button, relx=1,rely=1.3, anchor='n')
+            self.picker_active = True
+        
+        
+    def ask_color(self, selected_color):
+        self.text.configure(fg=selected_color)
+        
+        
     def change_spacing(self, selected_spacing):
         
         self.text.configure(spacing1=selected_spacing)

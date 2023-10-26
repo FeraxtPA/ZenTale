@@ -3,7 +3,7 @@ from style import *
 
 import customtkinter as ctk
 from tkinter import ttk
-
+from CTkMessagebox import CTkMessagebox
 import tkinter as tk
 
         
@@ -11,13 +11,15 @@ class TextField(tk.Text):
     def __init__(self, parent):
         super().__init__(master=parent)
         
-        self.grid(row=1, column=1,rowspan=2, sticky='nsew', pady=5, padx=5)
+        self.grid(row=1, column=1,sticky='nsew')
         
         
+        self.scrollbar_frame = ctk.CTkFrame(parent,fg_color='white', width=10)
+        self.scrollbar_frame.grid(row=1, column=2, sticky='nsw')
         
-        self.scrollbar = ctk.CTkScrollbar(self, command=self.yview, button_color=BUTTON_COLOR,  button_hover_color=BUTTON_HOVER_COLOR, fg_color=TEXT_FIELD_COLOR)
-        self.scrollbar.pack(side='right', fill='y')
         
+        self.scrollbar = ctk.CTkScrollbar(self.scrollbar_frame,command=self.yview, button_color=BUTTON_COLOR,  button_hover_color=BUTTON_HOVER_COLOR, fg_color=TEXT_FIELD_COLOR)
+        self.scrollbar.pack(fill='both', expand=True)
         
         self.configure(bg=TEXT_FIELD_COLOR,
                        fg=TEXT_FIELD_TEXT_COLOR,
@@ -29,13 +31,16 @@ class TextField(tk.Text):
                        yscrollcommand=self.scrollbar.set,
                        undo=True,
                        maxundo=1,
+                       insertwidth=4,
                        inactiveselectbackground='#148e9b')
                        
       
         
         
         self.bind('<Control-BackSpace>', lambda event: self.delete_whole_word(event))
-
+        
+        
+        
          
     def delete_whole_word(self, event):
         text_widget = event.widget
@@ -54,3 +59,14 @@ class TextField(tk.Text):
         return "break"  # Prevent the default behavior
 
 
+    def new_file(self, event=None):
+        
+        msg = CTkMessagebox(title="New File", message="Are you sure you want to create a new file?",
+                  option_1="Cancel", option_2="Yes")
+        response = msg.get()
+        
+        if response == 'Yes':
+           self.delete(0.0, "end")
+        else:
+            pass
+        
