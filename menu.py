@@ -15,11 +15,11 @@ class MenuBar(CTkTitleMenu):
         self.text = text_field
         
         self.file_button = self.add_cascade('File')
-        self.file_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color='#e8e0c2')
+        self.file_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='top', text_color='#e8e0c2')
       
        
         self.edit_button = self.add_cascade("Edit")
-        self.edit_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color='#e8e0c2')
+        self.edit_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='top', text_color='#e8e0c2')
         
         #? Placeholder settings_button = menu.add_cascade("Settings")
         #? Placeholder settings_button.configure(  fg_color='transparent', hover_color=HOVER_COLOR, font=('Segoe UI Variable', 16 ),anchor='center', text_color=TEXT_COLOR)
@@ -30,7 +30,7 @@ class MenuBar(CTkTitleMenu):
         
 
        
-           
+        
 
         
         self.file_dropdown = CustomDropdownMenu(widget=self.file_button, border_width=0, font=('Segoe UI Variable', 16 ), text_color=TEXT_COLOR, bg_color=MENU_COLOR, separator_color=SEPARATOR_COLOR, corner_radius=5, hover_color=HOVER_MENU_COLOR)
@@ -46,8 +46,8 @@ class MenuBar(CTkTitleMenu):
         #menu.bind('<Control-n>', print_open)
         #menu.bind('<Control-s>', print_save)
         
-        self.file_dropdown.add_option(option=OPEN_FILE, command=lambda: print("Open"))
-        self.file_dropdown.add_option(option=SAVE_FILE, command= lambda: print("Saved"))
+        self.file_dropdown.add_option(option=OPEN_FILE, command= self.text.open_file)
+        self.file_dropdown.add_option(option=SAVE_FILE, command= self.text.save_file_as_txt)
         
         self.file_sub_menu = self.file_dropdown.add_submenu(EXPORT_AS)
         self.file_sub_menu.add_option(option=".TXT", command= lambda: print("Hello motherfucker"))

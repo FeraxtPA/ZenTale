@@ -110,6 +110,10 @@ class Toolbar(ctk.CTkFrame):
         self.color_button.pack(side='left', pady=4, padx=4)
         
 
+    
+    
+        
+        
     def create_color_frame(self):
         if self.picker_active:
             if self.color_picker is not None:

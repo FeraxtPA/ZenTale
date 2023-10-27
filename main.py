@@ -2,7 +2,7 @@ from menu import MenuBar
 from style import FG_COLOR
 from text_field import TextField
 from toolbar import Toolbar
-
+from state_bar import *
 
 from tkinter import font
 
@@ -40,6 +40,7 @@ class App(ctk.CTk):
         self.font_families = font.families()
     
         #  Widgets
+       
         
         self.text_field = TextField(self)
         
@@ -48,8 +49,12 @@ class App(ctk.CTk):
         self.menu_bar = MenuBar(self, self.text_field)
         
         
-        self.rowconfigure(0, weight=1, uniform='a')
-        self.rowconfigure(1, weight=20, uniform='a')
+        self.state_bar = StateBar(self, self.text_field)
+        
+        self.text_field.set_state_bar(self.state_bar)
+        
+        self.rowconfigure(0, weight=2, uniform='a')
+        self.rowconfigure(1, weight=50, uniform='a')
         self.rowconfigure(2, weight=1, uniform='a')
         
         self.columnconfigure(0, weight=3, uniform='a')
@@ -63,9 +68,11 @@ class App(ctk.CTk):
         
         self.bind_all('<Control-q>', self.exit_app)
         self.bind_all('<Control-n>', self.text_field.new_file)
+        self.bind_all('<Control-o>', self.text_field.open_file)
+        self.bind_all('<Control-s>', self.text_field.save_file_as_txt)
         #? Works need to be done for every shortcut
         
-
+    
 
     def create_icon(self):
         self.iconpath = ImageTk.PhotoImage(file=self.ICON_PATH)
