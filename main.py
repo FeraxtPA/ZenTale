@@ -10,7 +10,7 @@ import customtkinter as ctk
 
 import os
 from PIL import ImageTk
-
+from test import *
 
 
 #? For changing title bar color // only works for windows
@@ -40,7 +40,7 @@ class App(ctk.CTk):
         self.font_families = font.families()
     
         #  Widgets
-       
+        print_hello()
         
         self.text_field = TextField(self)
         
