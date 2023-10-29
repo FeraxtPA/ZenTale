@@ -42,28 +42,28 @@ class Toolbar(ctk.CTkFrame):
         self.default_textfield_font_size = 16
         self.font = 'Arial'
         
-        self.color_picker = CTkColorPicker(width=500, command=self.ask_color, orientation='horizontal', corner_radius=5, fg_color="#69625a")
+        self.color_picker = CTkColorPicker(width=500, command=self.ask_color, orientation='horizontal', corner_radius=5, fg_color="#69625a", button_color=BUTTON_COLOR, button_hover_color=BUTTON_HOVER_COLOR)
         
-        
-       
-        
-        
+        self.font_pressed = False
+      
         self.font_size_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
         self.font_size_frame.pack(side='left', padx=10, anchor='center')
         
         self.font_button = ctk.CTkButton(self.font_size_frame, text='Arial', width=100, text_color=TEXT_COLOR, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16 ), anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR)
         self.font_button.pack(side='left', padx=4, pady=4)
         
-        self.font_size_button = ctk.CTkButton(self.font_size_frame, text=str(self.default_textfield_font_size),text_color=TEXT_COLOR ,width=30, fg_color=BUTTON_COLOR, font=('Segoe UI Variable', 16 ), corner_radius=5, hover_color=BUTTON_HOVER_COLOR)
+        self.font_size_button = ctk.CTkButton(self.font_size_frame, text=str(self.default_textfield_font_size),text_color=TEXT_COLOR ,width=30, fg_color=BUTTON_COLOR, font=('Segoe UI Variable', 16 ), corner_radius=5, hover_color=BUTTON_HOVER_COLOR, )
         self.font_size_button.pack(side='left', pady=4, padx= 4)
         
         
-        CTkScrollableDropdown(self.font_button, values=self.fonts, height=270,  button_height=30, width=300,
-                      scrollbar=True, resize=False, command=self.change_font)
+        CTkScrollableDropdown(self.font_button, values=self.fonts, height=290,  button_height=30, width=300,
+                      scrollbar=True,  command=self.change_font, frame_corner_radius=8, frame_border_width=0, scrollbar_button_color=BUTTON_COLOR, scrollbar_button_hover_color=BUTTON_HOVER_COLOR,
+                      button_color=BUTTON_COLOR, hover_color=BUTTON_HOVER_COLOR, fg_color='#69625a',text_color=TEXT_COLOR)
         
         
-        CTkScrollableDropdown(self.font_size_button, values=tuple(range(8,81)), height=270,  button_height=30, width=300,
-                      scrollbar=True, resize=False, command=self.change_font_size)
+        CTkScrollableDropdown(self.font_size_button, values=tuple(range(8,81)), height=300,  button_height=30, width=300,
+                      scrollbar=True, resize=False, command=self.change_font_size,frame_corner_radius=8, frame_border_width=0, scrollbar_button_color=BUTTON_COLOR, scrollbar_button_hover_color=BUTTON_HOVER_COLOR,
+                      button_color=BUTTON_COLOR, hover_color=BUTTON_HOVER_COLOR, fg_color='#69625a',text_color=TEXT_COLOR)
         
         self.bold_italic_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
         self.bold_italic_frame.pack(side='left', padx=10, anchor='center')
@@ -101,7 +101,8 @@ class Toolbar(ctk.CTkFrame):
        
         
         CTkScrollableDropdown(self.spacing_button, values=self.spacing_values, width=150,
-                      scrollbar=True, command=self.change_spacing)
+                      scrollbar=True, command=self.change_spacing, frame_corner_radius=8, frame_border_width=0, scrollbar_button_color=BUTTON_COLOR, scrollbar_button_hover_color=BUTTON_HOVER_COLOR,
+                      button_color=BUTTON_COLOR, hover_color=BUTTON_HOVER_COLOR, fg_color='#69625a',text_color=TEXT_COLOR)
         
        
         self.color_picker_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
@@ -110,9 +111,13 @@ class Toolbar(ctk.CTkFrame):
         self.color_button.pack(side='left', pady=4, padx=4)
         
 
-    
-    
+    def button_pressed(self):
         
+        if(self.font_pressed) == False:
+             self.font_pressed = True
+        else:
+            self.font_pressed = False
+   
         
     def create_color_frame(self):
         if self.picker_active:

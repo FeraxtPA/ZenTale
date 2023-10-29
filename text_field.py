@@ -96,12 +96,14 @@ class TextField(tk.Text):
             content = self.get(0.0, 'end')
             save_url.write(content)
             save_url.close()
+            #print(self.dump(0.0, 'end'))
         else:
             content =self.get(0.0, 'end')
             file=open(self.url,'w')
             file.write(content)
             self.state_bar.show_saved_message()
             self.after(1000, self.state_bar.hide_saved_message)
+            #print(self.dump(0.0, 'end'))
 
             
         

@@ -40,7 +40,7 @@ class App(ctk.CTk):
         self.font_families = font.families()
     
         #  Widgets
-        print_hello_world()
+        
         
         self.text_field = TextField(self)
         
