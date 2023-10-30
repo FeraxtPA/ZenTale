@@ -42,6 +42,9 @@ class Toolbar(ctk.CTkFrame):
         self.default_textfield_font_size = 16
         self.font = 'Arial'
         
+        self.font_style = []
+        self.styles =  []
+        
         self.color_picker = CTkColorPicker(width=500, command=self.ask_color, orientation='horizontal', corner_radius=5, fg_color="#69625a", button_color=BUTTON_COLOR, button_hover_color=BUTTON_HOVER_COLOR)
         
         self.font_pressed = False
@@ -68,13 +71,16 @@ class Toolbar(ctk.CTkFrame):
         self.bold_italic_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
         self.bold_italic_frame.pack(side='left', padx=10, anchor='center')
         
-        self.bold_button =ctk.CTkButton(self.bold_italic_frame, text='B', text_color=TEXT_COLOR,width=25, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16, 'bold' ), anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR, command=self.bold_text)
+        self.bold_button =ctk.CTkButton(self.bold_italic_frame, text='B', text_color=TEXT_COLOR,width=25, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16, 'bold' ), anchor='center', corner_radius=5, 
+                                        hover_color=BUTTON_HOVER_COLOR,  command= self.bold_text_test)
         self.bold_button.pack(side='left', pady=4, padx=4)
         
-        self.italic_button =ctk.CTkButton(self.bold_italic_frame, text='',width=25, fg_color=BUTTON_COLOR, anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.italic_image, command=self.italic_text)
+        self.italic_button =ctk.CTkButton(self.bold_italic_frame, text='',width=25, fg_color=BUTTON_COLOR, anchor='center', corner_radius=5, 
+                                          hover_color=BUTTON_HOVER_COLOR, image=self.italic_image, command= self.italic_text_test)
         self.italic_button.pack(side='left', pady=4, padx=4)
         
-        self.underline_button =ctk.CTkButton(self.bold_italic_frame, text='U',width=25,text_color=TEXT_COLOR, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16, 'underline' ), anchor='center', corner_radius=5, hover_color=BUTTON_HOVER_COLOR)
+        self.underline_button =ctk.CTkButton(self.bold_italic_frame, text='U',width=25,text_color=TEXT_COLOR, fg_color=BUTTON_COLOR, font=('Segoe UI Variable',16, 'underline' ), anchor='center', corner_radius=5, 
+                                             hover_color=BUTTON_HOVER_COLOR, command=self.underline_text_test)
         self.underline_button.pack(side='left', pady=4, padx=4)
         
         
@@ -111,12 +117,7 @@ class Toolbar(ctk.CTkFrame):
         self.color_button.pack(side='left', pady=4, padx=4)
         
 
-    def button_pressed(self):
-        
-        if(self.font_pressed) == False:
-             self.font_pressed = True
-        else:
-            self.font_pressed = False
+   
    
         
     def create_color_frame(self):
@@ -140,37 +141,132 @@ class Toolbar(ctk.CTkFrame):
         
         self.text.configure(spacing1=selected_spacing)
         self.spacing_button.configure(text=selected_spacing)
+      
+    def bold_text_test(self):
+        sel_start, sel_end = self.get_selection_indices()
+        if sel_start and sel_end:
+            # Check if 'bold' tag is already applied
+            is_bold_applied = 'bold' in self.text.tag_names(f'1.{sel_start}')
+            for index in range(sel_start, sel_end):
+                if is_bold_applied:
+                    self.text.tag_remove('bold', f'1.{index}', f'1.{index + 1}')
+                else:
+                    self.text.tag_add('bold', f'1.{index}', f'1.{index + 1}')
+            self.text.tag_configure('bold', font=(None, self.default_textfield_font_size, 'bold'))
+        else:
+            if 'bold' in self.styles:
+                self.styles.remove('bold')
+            else:
+                self.styles.append('bold')
+        self.update_text_style()
+
+    def italic_text_test(self):
+        sel_start, sel_end = self.get_selection_indices()
+        if sel_start and sel_end:
+            # Check if 'italic' tag is already applied
+            is_italic_applied = 'italic' in self.text.tag_names(f'1.{sel_start}')
+            for index in range(sel_start, sel_end):
+                if is_italic_applied:
+                    self.text.tag_remove('italic', f'1.{index}', f'1.{index + 1}')
+                else:
+                    self.text.tag_add('italic', f'1.{index}', f'1.{index + 1}')
+            self.text.tag_configure('italic', font=(None, self.default_textfield_font_size, 'italic'))
+        else:
+            if 'italic' in self.styles:
+                self.styles.remove('italic')
+            else:
+                self.styles.append('italic')
+        self.update_text_style()
+
+    def underline_text_test(self):
+        sel_start, sel_end = self.get_selection_indices()
+        if sel_start and sel_end:
+            # Check if 'underline' tag is already applied
+            is_underline_applied = 'underline' in self.text.tag_names(f'1.{sel_start}')
+            for index in range(sel_start, sel_end):
+                if is_underline_applied:
+                    self.text.tag_remove('underline', f'1.{index}', f'1.{index + 1}')
+                else:
+                    self.text.tag_add('underline', f'1.{index}', f'1.{index + 1}')
+            self.text.tag_configure('underline', font=(None, self.default_textfield_font_size, 'underline'))
+        else:
+            if 'underline' in self.styles:
+                self.styles.remove('underline')
+            else:
+                self.styles.append('underline')
+        self.update_text_style()
+
+
+
+    def update_text_style(self):
+        font_style = ' '.join(self.styles)
+        self.text.configure(font=(self.font, self.default_textfield_font_size, font_style))
+
+    def get_selection_indices(self):
+        try:
+            sel_start = int(self.text.index(tk.SEL_FIRST).split('.')[1])
+            sel_end = int(self.text.index(tk.SEL_LAST).split('.')[1])
+            return sel_start, sel_end
+        except tk.TclError:
+            return None, None
+            
         
-    def bold_text(self):
+        
+        
+        
+        
+    def bold_text(self, style):
+        
+        self.styles = []
+        self.styles.append(style)
+        print(self.styles)
+       
+       
+        
+            
         try:
             self.selection_start = self.text.index('sel.first')
             self.selection_end = self.text.index('sel.last')
-        except:
-            return
-
-        if self.selection_start == self.selection_end:
-            # No text is selected, just exit
-            return
-
-        current_tags = self.text.tag_names(self.selection_start)
-
-        # Toggle bold state
-        if self.isBold:
-            self.text.tag_remove('bold', self.selection_start, self.selection_end)
-        else:
             self.text.tag_add('bold', self.selection_start, self.selection_end)
-            self.text.tag_configure('bold', font=(self.font, self.default_textfield_font_size, 'bold'))
+        except:
+            self.selection_start = None
+            self.selection_end = None
 
-        # Check for existing italic tag and add it if present
-        if 'italic' in current_tags:
-            self.text.tag_add('bolditalic', self.selection_start, self.selection_end)
-            self.text.tag_configure('bolditalic', font=(self.font, self.default_textfield_font_size, 'bold italic'))
-
-        # Update the bold state
-        self.isBold = not self.isBold
-
-        # Deselect the text
-        self.text.tag_remove("sel", "1.0", "end")
+       
+       
+        if  not self.isBold and not self.isItalic and self.selection_start == None:
+                 self.font_style = 'bold'
+                 self.text.configure(font=(self.font, self.default_textfield_font_size, self.styles))
+                 self.isBold = True
+                 
+        elif self.isBold:
+                 self.font_style = None
+                 self.text.configure(font=(self.font, self.default_textfield_font_size))
+                 self.isBold = False
+             
+        elif self.isBold == True and self.isItalic == True and (self.selection_start and self.selection_end) is None:
+                self.text.configure(font=(self.font, self.default_textfield_font_size, 'italic'))
+                self.isBold = False
+                
+        elif self.isBold == False and  self.isItalic == False and (self.selection_start and self.selection_end) is not None:  
+                self.text.tag_config('bold', font=(self.font, self.default_textfield_font_size, 'bold'))
+                self.isBold = True
+                
+        elif self.isBold == False and self.isItalic == True and (self.selection_start and self.selection_end) is not None:
+                self.text.tag_config('bold', font=(self.font, self.default_textfield_font_size, 'bold italic'))
+                self.isBold = True
+                
+        elif self.isBold == True and (self.selection_start and self.selection_end) is not None:  
+                self.text.tag_config('bold', font=(self.font, self.default_textfield_font_size))
+                self.isBold = False
+                self.text.tag_remove('bold', self.selection_start, self.selection_end)
+                
+        elif self.isBold == True and  self.isItalic == True and (self.selection_start and self.selection_end) is not None:  
+                self.text.tag_config('bold', font=(self.font, self.default_textfield_font_size, 'italic'))
+                self.isBold = False
+                self.text.tag_remove('bold', self.selection_start, self.selection_end)
+            
+        
 
     def italic_text(self):
        
@@ -204,10 +300,7 @@ class Toolbar(ctk.CTkFrame):
                 self.text.tag_remove('italic', self.selection_start, self.selection_end)
             
         
-            
-           
-        
-    
+
     def change_font(self, selected_font):
         
         
