@@ -38,6 +38,7 @@ class Toolbar(ctk.CTkFrame):
         self.isBold = False
         self.isItalic = False
         self.text = text_field
+      
         
         self.default_textfield_font_size = 16
         self.font = 'Arial'
@@ -88,14 +89,16 @@ class Toolbar(ctk.CTkFrame):
         self.align_text_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
         self.align_text_frame.pack(side='left', padx=10, anchor='center')
         
-        self.align_left =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_left_image)
+        self.align_left =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_left_image, command = lambda: self.align_text('left'))
         self.align_left.pack(side='left', pady=4, padx=4)
         
-        self.align_center =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_center_image)
+        self.align_center =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_center_image, command = lambda: self.align_text('center'))
         self.align_center.pack(side='left', pady=4, padx=4)
         
-        self.align_right =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_right_image)
+        self.align_right =ctk.CTkButton(self.align_text_frame, text='',width=25, fg_color=BUTTON_COLOR,  corner_radius=5, hover_color=BUTTON_HOVER_COLOR, image=self.align_right_image, command = lambda: self.align_text('right'))
         self.align_right.pack(side='left', pady=4, padx=4)
+        
+      
         
         
         self.spacing_color_frame = ctk.CTkFrame(self, fg_color=TEXT_FIELD_COLOR, corner_radius=5)
@@ -119,6 +122,49 @@ class Toolbar(ctk.CTkFrame):
 
    
    
+   
+        
+        
+    def align_text(self, align):
+        
+        try:
+            sel_start = self.text.index(tk.SEL_FIRST)
+            sel_end = self.text.index(tk.SEL_LAST)
+        except:
+            sel_start = None
+            sel_end = None
+
+        if sel_start and sel_end:
+            # Get the text within the selection
+            selected_text = self.text.get(sel_start, sel_end)
+
+            # Apply alignment to the selected text
+            self.text.tag_configure(f'align_{sel_start}', justify=align)
+            self.text.tag_add(f'align_{sel_start}', sel_start, sel_end)
+        else:
+            # No selection, align the entire line where the cursor is
+            current_index = self.text.index(tk.INSERT)
+            current_line = current_index.split('.')[0]
+
+            # Get the text within the current line
+            start = f'{current_line}.0'
+            end = f'{current_line}.end'
+            current_line_text = self.text.get(start, end)
+
+            # Apply alignment to the current line
+            self.text.tag_configure(f'align_{current_line}', justify=align)
+            self.text.tag_add(f'align_{current_line}', start, end)
+
+            # Update the current line text with alignment
+            self.text.delete(start, end)
+            self.text.insert(start, current_line_text, f'align_{current_line}')
+
+
+           
+        
+        
+
+        
         
     def create_color_frame(self):
         if self.picker_active:
