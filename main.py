@@ -5,9 +5,9 @@ from toolbar import Toolbar
 from state_bar import *
 
 from tkinter import font
-
+import tkinter as tk
 import customtkinter as ctk
-
+from CTkMessagebox import CTkMessagebox
 import os
 from PIL import ImageTk
 from test import *
@@ -70,10 +70,17 @@ class App(ctk.CTk):
         self.bind_all('<Control-n>', self.text_field.new_file)
         self.bind_all('<Control-o>', self.text_field.open_file)
         self.bind_all('<Control-s>', self.text_field.save_file_as_txt)
-        #? Works need to be done for every shortcut
+        
+       
+        
         
     
 
+  
+            
+      
+    
+    
     def create_icon(self):
         self.iconpath = ImageTk.PhotoImage(file=self.ICON_PATH)
         self.iconphoto(False, self.iconpath)
@@ -87,7 +94,20 @@ class App(ctk.CTk):
             pass
     
     def exit_app(self, event):
-        self.destroy()
+        
+        msg = CTkMessagebox(title="Exit", message="Do you want to save the file?",
+                  option_1="Cancel", option_2="No", option_3='Yes')
+        response = msg.get()
+        
+        if response == 'Yes':
+           self.text_field.save_file_as_txt()
+           self.destroy()
+        elif response == 'No':
+            self.destroy()
+        elif response == 'Cancel':
+            msg.destroy()
+            
+        
     
     
  

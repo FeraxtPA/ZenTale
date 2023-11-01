@@ -42,9 +42,6 @@ class MenuBar(CTkTitleMenu):
        
         
         
-        #? works but only when you are currently focused on set wigdet         
-        #menu.bind('<Control-n>', print_open)
-        #menu.bind('<Control-s>', print_save)
         
         self.file_dropdown.add_option(option=OPEN_FILE, command= self.text.open_file)
         self.file_dropdown.add_option(option=SAVE_FILE, command= self.text.save_file_as_txt)
@@ -58,18 +55,17 @@ class MenuBar(CTkTitleMenu):
         
         self.file_dropdown.add_separator()
         
-        def exit_app():
-            parent.destroy()
+        
     
-        self.file_dropdown.add_option(option=EXIT, command=exit_app)
+        self.file_dropdown.add_option(option=EXIT, command=lambda: parent.exit_app(self))
         
        
 
         
         self.edit_dropdown = CustomDropdownMenu(widget=self.edit_button, border_width=0, font=('Segoe UI Variable', 16 ), text_color=TEXT_COLOR, bg_color=MENU_COLOR, separator_color=SEPARATOR_COLOR, corner_radius=5, hover_color=HOVER_MENU_COLOR)
-        self.edit_dropdown.add_option(option=CUT)
-        self.edit_dropdown.add_option(option=COPY)
-        self.edit_dropdown.add_option(option=PASTE)
+        self.edit_dropdown.add_option(option=CUT, command= self.text.cut_selected_text)
+        self.edit_dropdown.add_option(option=COPY, command= self.text.copy_selected_text)
+        self.edit_dropdown.add_option(option=PASTE, command=self.text.paste_clipboard_text)
         self.edit_dropdown.add_option(option=FIND)
 
     

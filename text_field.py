@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import filedialog
 from state_bar import*
 
+
 class TextField(tk.Text):
     def __init__(self, parent):
         super().__init__(master=parent)
@@ -15,12 +16,13 @@ class TextField(tk.Text):
         self.grid(row=1, column=1,sticky='nsew')
         
         self.state_bar = None
-        
+        self.toplevel_window = None
         self.url = ''
         self.parent = parent
         self.scrollbar_frame = ctk.CTkFrame(parent,fg_color='white', width=10)
         self.scrollbar_frame.grid(row=1, column=2, sticky='nsw')
-        
+        self.clipboard_text = ""
+        self.cut_text = False
         
         self.scrollbar = ctk.CTkScrollbar(self.scrollbar_frame,command=self.yview, button_color=BUTTON_COLOR,  button_hover_color=BUTTON_HOVER_COLOR, fg_color=TEXT_FIELD_COLOR)
         self.scrollbar.pack(fill='both', expand=True)
@@ -36,13 +38,15 @@ class TextField(tk.Text):
                        undo=True,
                        maxundo=1,
                        insertwidth=4,
+                       wrap='word',
                        inactiveselectbackground='#148e9b')
                        
       
         
         
         self.bind('<Control-BackSpace>', lambda event: self.delete_whole_word(event))
-        
+        self.bind('<Control-f>', self.find)
+        #self.bind('<Control-v>',lambda event:  self.paste_clipboard_text(event))
         
         
     def set_state_bar(self, state_bar):
@@ -104,6 +108,47 @@ class TextField(tk.Text):
             self.state_bar.show_saved_message()
             self.after(1000, self.state_bar.hide_saved_message)
             #print(self.dump(0.0, 'end'))
-
+    
             
+    def copy_selected_text(self):
+        # Get the currently selected text
+        selected_text = self.get(tk.SEL_FIRST, tk.SEL_LAST)
+
+        # If text is selected, copy it to the clipboard_text variable
+        if selected_text:
+            self.cut_text = False
+            self.clipboard_text = selected_text
+
+  
+
+    def cut_selected_text(self):
+        # Get the currently selected text
+        selected_text = self.get(tk.SEL_FIRST, tk.SEL_LAST)
+
+        # If text is selected, cut it and save it to the clipboard_text variable
+        
+        self.clipboard_text = selected_text
+        self.delete(tk.SEL_FIRST, tk.SEL_LAST)
+        self.cut_text = True   
+
+
+
+    def paste_clipboard_text(self):
+        
+        if not self.clipboard_text == '':
+            self.parent.clipboard_clear()
+        
+        if self.cut_text == True:
+            self.insert(tk.INSERT, self.clipboard_text)
+            self.cut_text = False
+            self.clipboard_text = ""  # Clear the clipboard text after pasting
+        else:
+            self.insert(tk.INSERT, self.clipboard_text)
+    
+    
+    def find(self, event):
+        pass
+        
+        
+        
         
